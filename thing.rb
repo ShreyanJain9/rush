@@ -23,11 +23,11 @@ class Class
 end
 
 module Kernel
-  def within(obj, lmbda = nil, &block)
-    ifelse lmbda,
-      ->() { obj.instance_eval(&lmbda) },
-      ->() { obj.instance_eval(&block) }
-  end
+  ƒ :within, ->(obj, lmbda = nil, &block) {
+      ifelse lmbda,
+             ->() { obj.instance_eval(&lmbda) },
+             ->() { obj.instance_eval(&block) }
+    }
 
   ƒ :cd, ->(dir) {
       Dir.chdir(dir.to_s)
