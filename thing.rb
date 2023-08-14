@@ -72,13 +72,15 @@ end
 
 [NilClass, FalseClass, TrueClass, Object, Array].each do |c|
   c.prepend(Module.new do
-    def |(o)
-      o.class == Infix ? o.v(self) : super
-    end
+    ƒ :|, ->(o) {
+        ifelse (o.class == Infix),
+               -> { o.v(self) },
+               -> { super(o) }
+      }
   end)
 end
 
-within Kernel do
+module Kernel
   def Infix(*a, &b)
     Infix.new(*a, &b)
   end
