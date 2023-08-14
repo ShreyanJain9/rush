@@ -2,25 +2,23 @@ class Object
   def ƒ(meth_name, lamb)
     define_method(meth_name, &lamb)
   end
-end
 
-class Module
-  ƒ :attr•, ->(name, &block) {
-      ƒ name, ->() {
-          ifelse (instance_variable_defined?("@#{name}_var")),
-                 -> { instance_variable_get("@#{name}_var") },
-                 -> { instance_variable_set("@#{name}_var", block.call) }
-        }
-    }
-end
-
-module Kernel
   ƒ :ifelse, ->(condition, if_body, else_body = nil) {
       if condition
         if_body.call
       elsif else_body
         else_body.call
       end
+    }
+end
+
+class Class
+  ƒ :attr•, ->(name, &block) {
+      ƒ name, ->() {
+          ifelse (instance_variable_defined?("@#{name}_var")),
+                 -> { instance_variable_get("@#{name}_var") },
+                 -> { instance_variable_set("@#{name}_var", block.call) }
+        }
     }
 end
 
