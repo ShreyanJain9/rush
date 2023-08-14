@@ -5,12 +5,13 @@ class Object
 end
 
 class Module
-  def attr•(name, &block)
-    define_method(name) do
-      return instance_variable_get("@#{name}_var") if instance_variable_defined?("@#{name}_var")
-      instance_variable_set("@#{name}_var", block.call)
-    end
-  end
+  ƒ :attr•, ->(name, &block) {
+      ƒ name, ->() {
+          ifelse (instance_variable_defined?("@#{name}_var")),
+                 -> { instance_variable_get("@#{name}_var") },
+                 -> { instance_variable_set("@#{name}_var", block.call) }
+        }
+    }
 end
 
 module Kernel
@@ -81,13 +82,13 @@ end
 end
 
 module Kernel
-  def Infix(*a, &b)
-    Infix.new(*a, &b)
-  end
+  ƒ :Infix, ->(*a, &b) {
+      Infix.new(*a, &b)
+    }
 
-  def °(*a, &b)
-    Infix.new(*a, &b)
-  end
+  ƒ :°, ->(*a, &b) {
+      Infix.new(*a, &b)
+    }
 end
 
 ƒ :≥≥, ->() {
