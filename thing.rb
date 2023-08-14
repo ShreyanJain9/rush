@@ -44,12 +44,13 @@ class Infix
     raise "both method and block passed" if a.length != 0 && b
     raise "no arguments passed" if a.length == 0 && !b
 
-    @m = a.length > 0 ? (a[0].class == Symbol ? method(a[0]) : a[0]) : b
+    @m = (¿ (a.length > 0), -> { ¿ (a[0].class == Symbol), -> { method(a[0]) }, -> { a[0] } },
+            -> { b })
 
-    if a.length == 3
-      @c = a[1]
-      @s = a[2]
-    end
+    ¿ (a.length == 3), -> {
+        @c = a[1]
+        @s = a[2]
+      }
   end
 
   ƒ :|, ->(o) {
@@ -90,11 +91,11 @@ module Kernel
 end
 
 ƒ :≥≥, ->() {
-    °(&->(str, file) { File.open(file, "w") { |f| f.write(str) } })
+    ° ->(str, file) { File.open(file, "w") { |f| f.write(str) } }
   }
 
 ƒ :≥, ->() {
-    °(&->(str, file) { File.open(file, "a") { |f| f.write(str) } })
+    ° ->(str, file) { File.open(file, "a") { |f| f.write(str) } }
   }
 
 # example: "hello!" |≥| "world.txt" appends "hello!" to "world.txt"
@@ -109,11 +110,11 @@ end
 
 within String do
   ƒ :>>, ->(filename) {
-      File.open(filename, "a") { |f| f.write(self) }
+      File.open(filename, "a") { |f| f.write self }
     }
 
   ƒ :>, ->(filename) { # come on nobody needs to compare strings anyway
-      File.open(filename, "w") { |f| f.write(self) }
+      File.open(filename, "w") { |f| f.write self }
     }
 end
 
@@ -122,7 +123,7 @@ end
   }
 
 ƒ :∑, ->(*a) {
-    a.inject(:+)
+    a.inject :+
   }
 
 ƒ :π, -> {
