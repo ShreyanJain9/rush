@@ -3,7 +3,7 @@ class Object
     define_method(meth_name, &lamb)
   end
 
-  ƒ :ifelse, ->(condition, if_body, else_body = nil) {
+  ƒ :¿, ->(condition, if_body, else_body = nil) {
       if condition
         if_body.call
       elsif else_body
@@ -15,18 +15,18 @@ end
 class Class
   ƒ :attr•, ->(name, &block) {
       ƒ name, ->() {
-          ifelse (instance_variable_defined?("@#{name}_var")),
-                 -> { instance_variable_get("@#{name}_var") },
-                 -> { instance_variable_set("@#{name}_var", instance_eval(&block)) }
+          ¿ (instance_variable_defined?("@#{name}_var")),
+            -> { instance_variable_get("@#{name}_var") },
+            -> { instance_variable_set("@#{name}_var", instance_eval(&block)) }
         }
     }
 end
 
 module Kernel
   ƒ :within, ->(obj, lmbda = nil, &block) {
-      ifelse lmbda,
-             ->() { obj.instance_eval(&lmbda) },
-             ->() { obj.instance_eval(&block) }
+      ¿ lmbda,
+        ->() { obj.instance_eval(&lmbda) },
+        ->() { obj.instance_eval(&block) }
     }
 
   ƒ :cd, ->(dir) {
@@ -53,11 +53,11 @@ class Infix
   end
 
   ƒ :|, ->(o) {
-      ifelse @c,
-             ->() { o.class == Infix ? self : @m.(@s, o) },
-             ->() {
-               raise "missing first operand"
-             }
+      ¿ @c,
+        ->() { o.class == Infix ? self : @m.(@s, o) },
+        ->() {
+          raise "missing first operand"
+        }
     }
 
   ƒ :coerce, ->(o) {
@@ -72,9 +72,9 @@ end
 [NilClass, FalseClass, TrueClass, Object, Array].each do |c|
   c.prepend(Module.new do
     ƒ :|, ->(o) {
-        ifelse (o.class == Infix),
-               -> { o.v(self) },
-               -> { super(o) }
+        ¿ (o.class == Infix),
+          -> { o.v(self) },
+          -> { super(o) }
       }
   end)
 end
@@ -157,10 +157,6 @@ end
     1 / (x * x * x * x)
   }
 
-ƒ :∆, ->(x) {
-    1 / (x * x * x * x)
-  }
-
 within String do
   ƒ :titlecase, ->() {
       self.split(" ")
@@ -169,8 +165,8 @@ within String do
     }
 end
 
-ifelse (__FILE__ == $0), ->() {
-         require "irb"
-         require "pp"
-         IRB.start
-       }
+¿ (__FILE__ == $0), ->() {
+    require "irb"
+    require "pp"
+    IRB.start
+  }
