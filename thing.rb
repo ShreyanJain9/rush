@@ -17,7 +17,7 @@ class Class
       ƒ name, ->() {
           ifelse (instance_variable_defined?("@#{name}_var")),
                  -> { instance_variable_get("@#{name}_var") },
-                 -> { instance_variable_set("@#{name}_var", block.call) }
+                 -> { instance_variable_set("@#{name}_var", instance_eval(&block)) }
         }
     }
 end
@@ -103,9 +103,6 @@ end
     ° ->(a, b) { a ** b }
   }
 
-# This infix should work like Elixir's |> operator.
-# It should pipe the right operand into the left operand
-# and return the result.
 ƒ :», ->() {
     ° ->(obj, method) { send method, obj }
   }
