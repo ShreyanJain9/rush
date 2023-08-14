@@ -78,7 +78,7 @@ end
   end)
 end
 
-module Kernel
+within Kernel do
   def Infix(*a, &b)
     Infix.new(*a, &b)
   end
@@ -89,11 +89,11 @@ module Kernel
 end
 
 ƒ :≥≥, ->() {
-    °(->(str, file) { File.open(file, "w") { |f| f.write(str) } })
+    °(&->(str, file) { File.open(file, "w") { |f| f.write(str) } })
   }
 
 ƒ :≥, ->() {
-    °(->(str, file) { File.open(file, "a") { |f| f.write(str) } })
+    °(&->(str, file) { File.open(file, "a") { |f| f.write(str) } })
   }
 
 # example: "hello!" |≥| "world.txt" appends "hello!" to "world.txt"
@@ -109,7 +109,7 @@ end
     ° ->(obj, method) { send method, obj }
   }
 
-class String
+within String do
   ƒ :>>, ->(filename) {
       File.open(filename, "a") { |f| f.write(self) }
     }
@@ -118,18 +118,6 @@ class String
       File.open(filename, "w") { |f| f.write(self) }
     }
 end
-
-ƒ :≥≥, ->(str, file) {
-    File.open(file, "w") { |f| f.write(str) }
-  }
-
-ƒ :≥, ->(str, file) {
-    File.open(file, "a") { |f| f.write(str) }
-  }
-
-ƒ :•, ->(a, b) {
-    a ** b
-  }
 
 ƒ :», ->(obj, method) {
     send method, obj
@@ -175,7 +163,7 @@ end
     1 / (x * x * x * x)
   }
 
-class String
+within String do
   ƒ :titlecase, ->() {
       self.split(" ")
         .map(&:capitalize)
